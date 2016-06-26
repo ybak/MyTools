@@ -3,6 +3,7 @@ package org.ybak.hystrix.basic.rxjava;
 import org.apache.commons.lang.RandomStringUtils;
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import java.util.Arrays;
@@ -21,14 +22,14 @@ public class RxJavaTest {
         baseTest();
     }
 
-    private static void baseTest() {
-        Observable
-                .create(subscriber ->
-                    IntStream.range(0, 10).forEach(
-                        i -> subscriber.onNext(RandomStringUtils.randomAlphanumeric(5))
-                     )
-                )
-                .subscribe(s -> System.out.println("Hello " + s + "!"));
+    private static void baseTest() throws InterruptedException {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .window(3).subscribe(window -> {
+            System.out.println(window);
+            window.map(Object::toString).reduce((sum, i) -> sum + i).subscribe(System.out::println);
+        });
+
+        TimeUnit.SECONDS.sleep(12);
     }
 
     private static void bufferTest() throws InterruptedException {
