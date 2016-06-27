@@ -1,4 +1,4 @@
-package org.ybak.hystrix.basic;
+package org.ybak.hystrix.basic.hystrix;
 
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
