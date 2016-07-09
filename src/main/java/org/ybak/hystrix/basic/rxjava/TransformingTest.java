@@ -1,11 +1,13 @@
 package org.ybak.hystrix.basic.rxjava;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Test;
 import rx.Observable;
 import rx.Subscription;
 import rx.internal.util.InternalObservableUtils;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -62,6 +64,21 @@ public class TransformingTest {
         subscription1.unsubscribe();
         subscription2.unsubscribe();
     }
+
+    @Test
+    public void timeWindowTest() throws InterruptedException {
+        Observable<Integer> source = Observable.interval(50, TimeUnit.MILLISECONDS).map(i -> RandomUtils.nextInt(2));
+
+        source.window(1, TimeUnit.SECONDS).subscribe(window -> {
+            int[] metrics = new int[2];
+            window.subscribe(i -> metrics[i]++,
+                    InternalObservableUtils.ERROR_NOT_IMPLEMENTED,
+                    () -> System.out.println("窗口metrics:" + JSON.toJSONString(metrics)));
+        });
+
+        TimeUnit.SECONDS.sleep(3);
+    }
+
 
     @Test
     public void windowSkipTest() {

@@ -57,8 +57,8 @@ public class MapReduceTest {
                 .flatMap(line -> Arrays.stream(line.trim().split(" "))) // 分隔
                 .map(word -> word.replaceAll("[^a-zA-Z]", "").toLowerCase().trim())
                 .filter(word -> word.length() > 0)
-                .map(word -> new SimpleEntry<>(word, 1L))
-                .collect(groupingBy(SimpleEntry::getKey, counting()));
+                .map(word -> new SimpleEntry<>(word, 1L))// map
+                .collect(groupingBy(SimpleEntry::getKey, counting())); //reduce
 
         wordCount.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue((x, y) -> -Long.compare(x, y))) //排序

@@ -48,8 +48,10 @@ public class MiscTest {
     public void windowGroupTest() throws Exception {
         Observable.interval(1, TimeUnit.MILLISECONDS)
                 .map(x -> RandomUtils.nextInt(10))
-                .buffer(100)
-                .take(3).toBlocking()
+
+                .buffer(100) // window
+                .take(3).toBlocking() //取3个
+
                 .subscribe(
                         buffer -> {
                             buffer.stream()
@@ -57,6 +59,7 @@ public class MiscTest {
                                     .collect(groupingBy(AbstractMap.SimpleEntry::getKey, counting()))
                                     .entrySet().stream()
                                     .forEach(System.out::println);
+
                             System.out.println();
                         }
                 );

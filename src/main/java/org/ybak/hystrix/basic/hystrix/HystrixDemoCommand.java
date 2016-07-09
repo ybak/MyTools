@@ -18,6 +18,11 @@ public class HystrixDemoCommand extends HystrixCommand<String> {
         return RandomStringUtils.randomAlphabetic(5);
     }
 
+    @Override
+    protected String getFallback() {
+        return "";
+    }
+
     public static void main(String[] args) {
         new HystrixDemoCommand().execute();
     }
